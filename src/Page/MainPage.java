@@ -39,6 +39,10 @@ public class MainPage {
         endDatePicker.setPrefWidth(80);
         ComboBox<String> taskTypeComboBox = new ComboBox<>();
         taskTypeComboBox.getItems().addAll("Must Do", "Side Task", "Recurring Task");
+        taskTypeComboBox.setOnAction(e -> {
+            startDatePicker.setValue(null);
+            endDatePicker.setValue(null);
+        });
         taskTypeComboBox.setValue("Must Do");
         taskTypeComboBox.setPrefWidth(100);
 
