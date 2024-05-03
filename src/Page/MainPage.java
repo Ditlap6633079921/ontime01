@@ -91,12 +91,18 @@ public class MainPage {
         filterButton = new Button("Filter");
         filterButton.setOnAction(e -> filterTasksByDate(filterDatePicker.getValue()));
 
-        HBox filterBox = new HBox(10);
-        filterBox.getChildren().addAll(new Label("Filter by Date:"), filterDatePicker, filterButton);
-        filterBox.setPadding(new Insets(10));
+        Button clearButton = new Button("Clear");
+        clearButton.setOnAction(e -> {
+            filterDatePicker.setValue(null);
+            filterTasksByDate(null); // Show all tasks
+        });
+
+        HBox buttonBox = new HBox(10);
+        buttonBox.getChildren().addAll(new Label("Filter by Date:"), filterDatePicker, filterButton, clearButton);
+        buttonBox.setPadding(new Insets(10));
 
         // Add components to the root layout
-        root.getChildren().addAll(new Label("All Tasks"), filterBox, allTasksListView, inputBox);
+        root.getChildren().addAll(new Label("All Tasks"), buttonBox, allTasksListView, inputBox);
         root.setPadding(new Insets(10));
     }
 
