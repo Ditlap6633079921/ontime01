@@ -43,7 +43,25 @@ public class MainPage {
         taskTypeComboBox.setPrefWidth(100);
 
         Button addButton = new Button("Add");
-        addButton.setOnAction(e -> addTask(taskInput.getText(), startDatePicker.getValue(), endDatePicker.getValue(), taskTypeComboBox.getValue()));
+
+        addButton.setOnAction(e -> {
+            LocalDate startDate = startDatePicker.getValue();
+            LocalDate endDate = endDatePicker.getValue();
+            // Check if the start date is later than the end date
+            if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+                // If so, set the end date equal to the start date
+                endDatePicker.setValue(startDate);
+            }
+            // Add the task with the updated end date
+            addTask(taskInput.getText(), startDatePicker.getValue(), endDatePicker.getValue(), taskTypeComboBox.getValue());
+
+            // Reset input fields
+            taskInput.clear();
+            startDatePicker.setValue(null);
+            endDatePicker.setValue(null);
+            taskTypeComboBox.setValue("Must Do"); // Reset task type to "Must Do"
+        });
+
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(e -> removeTask());
 
