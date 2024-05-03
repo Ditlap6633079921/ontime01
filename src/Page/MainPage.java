@@ -13,6 +13,7 @@ import Task.Task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class MainPage {
 
@@ -20,6 +21,8 @@ public class MainPage {
     private ListView<Task> allTasksListView;
     private DatePicker startDatePicker;
     private DatePicker LimitDate;
+    private DatePicker filterDatePicker;
+    private Button filterButton;
 
     public MainPage(VBox root) {
         allTasks = FXCollections.observableArrayList();
@@ -83,8 +86,17 @@ public class MainPage {
             }
         });
 
+        // Create filter controls
+        filterDatePicker = new DatePicker();
+        filterButton = new Button("Filter");
+        filterButton.setOnAction(e -> filterTasksByDate(filterDatePicker.getValue()));
+
+        HBox filterBox = new HBox(10);
+        filterBox.getChildren().addAll(new Label("Filter by Date:"), filterDatePicker, filterButton);
+        filterBox.setPadding(new Insets(10));
+
         // Add components to the root layout
-        root.getChildren().addAll(new Label("All Tasks"), allTasksListView, inputBox);
+        root.getChildren().addAll(new Label("All Tasks"), filterBox, allTasksListView, inputBox);
         root.setPadding(new Insets(10));
     }
 
@@ -100,7 +112,7 @@ public class MainPage {
                     break;
                 case "Recurring Task":
                     if (startDate != null && endDate != null) {
-                        newTask = new RecurringTask(taskDescription, endDate, startDate, endDate, ""); // For Recurring, use both start and end date
+                        newTask = new RecurringTask(taskDescription, endDate, startDate, startDate, ""); // For Recurring, use both start and end date
                     }
                     break;
             }
@@ -116,6 +128,18 @@ public class MainPage {
         int selectedIndex = allTasksListView.getSelectionModel().getSelectedIndex();
         if (selectedIndex != -1) {
             allTasks.remove(selectedIndex);
+        }
+    }
+
+    private void filterTasksByDate(LocalDate date) {
+        if (date != null) {
+            ObservableList<Task> filteredTasks = allTasks.stream()
+                    .filter(task -> task.getDeadline().isEqual(date) || (task instanceof RecurringTask && date.isAfter(((RecurringTask) task).getStartDate()) && date.isBefore(((RecurringTask) task).getDeadline())))
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            allTasksListView.setItems(filteredTasks);
+        } else {
+            // If no date selected, show all tasks
+            allTasksListView.setItems(allTasks);
         }
     }
 
