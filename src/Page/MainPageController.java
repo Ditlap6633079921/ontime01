@@ -1,22 +1,15 @@
 package Page;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 
 public class MainPageController {
 
     @FXML
-    private AnchorPane root;
-
-    @FXML
-    private Button doneButton;
-
-    @FXML
-    private Button addButton;
+    private TextField taskInput;
 
     @FXML
     private DatePicker startDatePicker;
@@ -28,13 +21,7 @@ public class MainPageController {
     private DatePicker filterDatePicker;
 
     @FXML
-    private TextField taskDescriptionTextField;
-
-    @FXML
-    private TextField taskDescriptionFilterTextField;
-
-    @FXML
-    private ComboBox<String> taskTypeComboBox;
+    private Button addButton;
 
     @FXML
     private Button filterButton;
@@ -43,53 +30,22 @@ public class MainPageController {
     private Button clearButton;
 
     @FXML
-    private Button filterByDateButton;
-
-    public AnchorPane getRoot() {
-        return root;
+    protected void initialize() {
+        // You can initialize anything here if needed
     }
 
-    public Button getDoneButton() {
-        return doneButton;
+    @FXML
+    private void handleAddButtonClicked(ActionEvent event) {
+        // Add your logic here for handling the add button click
     }
 
-    public Button getAddButton() {
-        return addButton;
+    @FXML
+    private void handleFilterButtonClicked(ActionEvent event) {
+        // Add your logic here for handling the filter button click
     }
 
-    public DatePicker getStartDatePicker() {
-        return startDatePicker;
-    }
-
-    public DatePicker getEndDatePicker() {
-        return endDatePicker;
-    }
-
-    public DatePicker getFilterDatePicker() {
-        return filterDatePicker;
-    }
-
-    public TextField getTaskDescriptionTextField() {
-        return taskDescriptionTextField;
-    }
-
-    public TextField getTaskDescriptionFilterTextField() {
-        return taskDescriptionFilterTextField;
-    }
-
-    public ComboBox<String> getTaskTypeComboBox() {
-        return taskTypeComboBox;
-    }
-
-    public Button getFilterButton() {
-        return filterButton;
-    }
-
-    public Button getClearButton() {
-        return clearButton;
-    }
-
-    public Button getFilterByDateButton() {
-        return filterByDateButton;
+    @FXML
+    private void handleClearButtonClicked(ActionEvent event) {
+        // Add your logic here for handling the clear button click
     }
 }
