@@ -10,6 +10,7 @@ import Task.RecurringTask;
 import Task.SideTask;
 import Task.Task;
 
+import java.io.FileWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -17,12 +18,18 @@ import java.util.stream.Collectors;
 
 public class MainPage {
 
+    // Task
     private ObservableList<Task> allTasks;
     private ListView<Task> allTasksListView;
+    //Date
     private DatePicker startDatePicker;
+    private DatePicker endDatePicker;
     private DatePicker filterDatePicker;
+    // Layout
     private Button filterButton;
     private VBox root;
+    private TextField taskInput;
+    private ComboBox<String> taskTypeComboBox;
 
     public MainPage(VBox root) {
         this.root = root;
@@ -34,15 +41,15 @@ public class MainPage {
         allTasksListView.setCellFactory(param -> new TaskListCell());
 
         // Create the input fields and buttons
-        TextField taskInput = new TextField();
+        taskInput = new TextField();
         taskInput.setPromptText("Enter a task");
         taskInput.setPrefWidth(160);
         startDatePicker = new DatePicker(); // Start date picker for recurring tasks
         startDatePicker.setPrefWidth(80);
         startDatePicker.setDisable(true); // Initially disabled
-        DatePicker endDatePicker = new DatePicker(); // End date picker for all tasks
+        endDatePicker = new DatePicker(); // End date picker for all tasks
         endDatePicker.setPrefWidth(80);
-        ComboBox<String> taskTypeComboBox = new ComboBox<>();
+        taskTypeComboBox = new ComboBox<>();
         taskTypeComboBox.getItems().addAll("Must Do", "Side Task", "Recurring Task");
         taskTypeComboBox.setOnAction(e -> {
             startDatePicker.setValue(null);
@@ -54,21 +61,9 @@ public class MainPage {
         Button addButton = new Button("Add");
 
         addButton.setOnAction(e -> {
-            LocalDate startDate = startDatePicker.getValue();
-            LocalDate endDate = endDatePicker.getValue();
-            // Check if the start date is later than the end date
-            if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
-                // If so, set the end date equal to the start date
-                endDatePicker.setValue(startDate);
-            }
             // Add the task with the updated end date
             addTask(taskInput.getText(), startDatePicker.getValue(), endDatePicker.getValue(), taskTypeComboBox.getValue());
 
-            // Reset input fields
-            taskInput.clear();
-            startDatePicker.setValue(null);
-            endDatePicker.setValue(null);
-            taskTypeComboBox.setValue("Must Do"); // Reset task type to "Must Do"
         });
 
         Button removeButton = new Button("Remove");
@@ -108,6 +103,10 @@ public class MainPage {
     }
 
     private void addTask(String taskDescription, LocalDate startDate, LocalDate endDate, String taskType) {
+        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            // If so, set the end date equal to the start date
+            endDate = startDate;
+        }
         if (!taskDescription.isEmpty() && endDate != null) {
             Task newTask = null;
             switch (taskType) {
@@ -119,7 +118,7 @@ public class MainPage {
                     break;
                 case "Recurring Task":
                     if (startDate != null && endDate != null) {
-                        newTask = new RecurringTask(taskDescription, endDate, startDate, startDate, ""); // For Recurring, use both start and end date
+                        newTask = new RecurringTask(taskDescription, startDate, endDate); // For Recurring, use both start and end date
                     }
                     break;
             }
@@ -128,6 +127,38 @@ public class MainPage {
                 // Sort tasks by date after adding new task
                 allTasks.sort(Comparator.comparing(Task::getDeadline));
             }
+        }
+        // Reset input fields
+        this.taskInput.clear();
+        this.startDatePicker.setValue(null);
+        this.endDatePicker.setValue(null);
+        this.taskTypeComboBox.setValue("Must Do"); // Reset task type to "Must Do"
+        storeTaskData();
+    }
+
+    private void storeTaskData() {
+        String JSONtasks = new String();
+        JSONtasks += "[\n";
+        for(Task task : allTasks) {
+            JSONtasks += "\t{\n";
+            JSONtasks += "\t\t" + "\"Task Description\" : " + '"' + task.getDescription() + '"' + ",\n";
+            JSONtasks += "\t\t" + "\"Task Type\" : " + '"' + task.getType() + '"' + ",\n";
+            if(task.getType() == "Recurring Task") { JSONtasks += "\t\t" + "\"Start Date\" : " + '"' + ((RecurringTask)task).getStartDate() + '"' + ",\n"; }
+            JSONtasks += "\t\t" + "\"End Date\" : " + '"' + task.getDeadline() + '"' + "\n";
+            if(task != allTasks.getLast())
+                JSONtasks += "\t},\n";
+            else
+                JSONtasks += "\t}\n";
+        }
+        JSONtasks += "]";
+
+        try (FileWriter file = new FileWriter("Tasks.json")) {
+            file.write(JSONtasks);
+            System.out.println("Successfully Copied JSON Object to File...");
+            System.out.println("\nJSON Object: " + JSONtasks);
+        } catch(Exception e){
+            System.out.println(e);
+
         }
     }
 
