@@ -3,6 +3,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import Page.MainPage;
@@ -10,7 +11,7 @@ import Page.MainPage;
 public class Main extends Application {
 
     private Stage primaryStage;
-    private BorderPane root;
+    private StackPane root;
     private MainPage mainPage;
 
     @Override
@@ -19,7 +20,7 @@ public class Main extends Application {
         this.primaryStage.setTitle("To-do List App");
 
         // Create the welcome scene
-        root = new BorderPane();
+        root = new StackPane();
         Scene welcomeScene = new Scene(root, 300, 200);
 
         Button getStartedButton = new Button("Get Started");
@@ -29,10 +30,7 @@ public class Main extends Application {
             goToDashboard();
         });
 
-        VBox welcomeBox = new VBox(10);
-        welcomeBox.getChildren().add(getStartedButton);
-        welcomeBox.setPadding(new Insets(10));
-        root.setCenter(welcomeBox);
+        root.getChildren().add(getStartedButton);
 
         // Show the welcome scene
         primaryStage.setScene(welcomeScene);
