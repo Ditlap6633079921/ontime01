@@ -20,7 +20,6 @@ public class MainPage {
     private ObservableList<Task> allTasks;
     private ListView<Task> allTasksListView;
     private DatePicker startDatePicker;
-    private DatePicker LimitDate;
     private DatePicker filterDatePicker;
     private Button filterButton;
     private VBox root;
