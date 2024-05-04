@@ -23,8 +23,10 @@ public class MainPage {
     private DatePicker LimitDate;
     private DatePicker filterDatePicker;
     private Button filterButton;
+    private VBox root;
 
     public MainPage(VBox root) {
+        this.root = root;
         allTasks = FXCollections.observableArrayList();
         allTasksListView = new ListView<>();
         allTasksListView.setItems(allTasks);
@@ -171,5 +173,9 @@ public class MainPage {
                 }
             }
         }
+    }
+
+    public VBox getRoot() {
+        return root;
     }
 }
