@@ -1,6 +1,7 @@
 package Task;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public abstract class Task {
     private String description;
@@ -41,6 +42,7 @@ public abstract class Task {
 
     @Override
     public String toString() {
-        return description + " (Due: " + deadline.toString() + ")";
+        String deadlineString = deadline.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return description + " (" + type + ") - Deadline: " + deadlineString;
     }
 }
