@@ -140,6 +140,7 @@ public class Goto {
         // Add components to the root layout
         rootPane.getChildren().addAll(allTasksLabel, buttonBox, allTasksListView, inputBox);
         rootPane.setPadding(new Insets(10));
+//        rootPane.setStyle("-fx-border-color: black; -fx-border-width: 2px;");
     }
 
     /* ---------------------- Button ------------------------- */
