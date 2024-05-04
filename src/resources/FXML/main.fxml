@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Page.MainPageController">
     <children>
-        <AnchorPane layoutY="-1.0" prefHeight="502.0" prefWidth="805.0" style="-fx-border-color: #030133; -fx-border-width: 7; -fx-background-color: #CDE8E5;">
+        <AnchorPane layoutY="-2.0" prefHeight="502.0" prefWidth="805.0" style="-fx-border-color: #030133; -fx-border-width: 7; -fx-background-color: #CDE8E5;">
             <children>
                 <Pane layoutX="85.0" layoutY="122.0" prefHeight="266.0" prefWidth="636.0" style="-fx-background-color: #EEF7FF; -fx-background-radius: 8;">
                     <children>
