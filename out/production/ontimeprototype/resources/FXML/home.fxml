@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HomePageController">
     <children>
         <BorderPane prefHeight="508.0" prefWidth="808.0">
             <top>
@@ -24,7 +24,7 @@
             <center>
                 <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #d6d6d6;" BorderPane.alignment="CENTER">
                     <children>
-                        <Button fx:id="startbtn" layoutX="329.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleGoToMainPage" prefHeight="43.0" prefWidth="150.0" text="Get Started" />
+                        <Button fx:id="startBtn" layoutX="329.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleGoToMainPage" prefHeight="43.0" prefWidth="150.0" text="Get Started" />
                         <Text layoutX="314.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ON-TIME">
                             <font>
                                 <Font name="Times New Roman Bold" size="40.0" />
