@@ -1,3 +1,5 @@
+package Page;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -6,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Main extends Application {
+public class HomePage extends Application {
 
 //    private Stage primaryStage;
 //    private MainPage mainPage;
@@ -18,7 +20,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             // Load the FXML file
-            Parent root = FXMLLoader.load(getClass().getResource("resources/FXML/home.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("../resources/FXML/home.fxml"));
 
             // Set up the stage
             primaryStage.setTitle("To-do List App");

@@ -1,3 +1,5 @@
+package Controller;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -14,7 +16,7 @@ public class HomePageController {
     public void handleGoToMainPage(ActionEvent event) {
         try {
             // Load the FXML file
-            Parent root = FXMLLoader.load(getClass().getResource("resources/FXML/main.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("../resources/FXML/main.fxml"));
 
             Scene mainScene = new Scene(root);
 
