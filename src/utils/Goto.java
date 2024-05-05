@@ -1,6 +1,8 @@
 package utils;
 
 import Controller.MainPageController;
+import javafx.geometry.Pos;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import pane.*;
@@ -41,7 +43,7 @@ public class Goto {
         allTasksListView.setItems(MainPageController.getInstance().getAllTasks());
         allTasksListView.setPrefWidth(800); // Set width to accommodate all tasks
         allTasksListView.setPrefHeight(500); // Adjusted height
-        allTasksListView.setStyle("-fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 1" +
+        allTasksListView.setStyle("-fx-border-color: black; -fx-border-width: 1" +
                 "px;");
         allTasksListView.setCellFactory(param -> new ListCell<Task>(){
             @Override
@@ -81,8 +83,8 @@ public class Goto {
         taskTypeComboBox.setValue("Must Do");
         taskTypeComboBox.setPrefWidth(100);
 
-        Button addButton = BarButton("Add", 0, Color.SPRINGGREEN, Color.BLACK, 4);
-        onHoverButton(addButton, Color.LIMEGREEN, Color.SPRINGGREEN);
+        Button addButton = BarButton("Add", 0, Color.WHITE, Color.BLACK, 4);
+        onHoverButton(addButton, Color.SLATEBLUE, Color.WHITE, Color.WHITE, Color.BLACK);
 
         addButton.setOnAction(e -> {
             // Add the task with the updated end date
@@ -94,8 +96,8 @@ public class Goto {
             taskTypeComboBox.setValue("Must Do"); // Reset task type to "Must Do"
         });
 
-        Button removeButton = BarButton("Remove", 0, Color.ORANGERED, Color.BLACK, 4);
-        onHoverButton(removeButton, Color.RED, Color.ORANGERED);
+        Button removeButton = BarButton("Remove", 0, Color.WHITE, Color.BLACK, 4);
+        onHoverButton(removeButton, Color.SLATEBLUE, Color.WHITE, Color.WHITE, Color.BLACK);
         removeButton.setOnAction(e -> {
             int index = allTasksListView.getSelectionModel().getSelectedIndex();
             if(index != -1)
@@ -117,25 +119,41 @@ public class Goto {
 
         // Create filter controls
         DatePicker filterDatePicker = new DatePicker();
-        Button filterButton = BarButton("Filter", 0, Color.LIGHTGREEN, Color.BLACK, 4);
-        onHoverButton(filterButton, Color.LIMEGREEN, Color.LIGHTGREEN);
+        Button filterButton = BarButton("Filter", 0, Color.WHITE, Color.BLACK, 4);
+        onHoverButton(filterButton, Color.SLATEBLUE, Color.WHITE, Color.WHITE, Color.BLACK);
         filterButton.setOnAction(e -> {
             allTasksListView.setItems(MainPageController.getInstance().filterTasksByDate(filterDatePicker.getValue()));
         });
 
-        Button clearButton = BarButton("Clear", 0, Color.ORANGE, Color.BLACK, 4);
-        onHoverButton(clearButton, Color.ORANGERED, Color.ORANGE);
+        Button clearButton = BarButton("Clear", 0, Color.WHITE, Color.BLACK, 4);
+        onHoverButton(clearButton, Color.SLATEBLUE, Color.WHITE, Color.WHITE, Color.BLACK);
         clearButton.setOnAction(e -> {
             filterDatePicker.setValue(null);
             allTasksListView.setItems(MainPageController.getInstance().filterTasksByDate(null)); // Show all tasks
         });
 
+        ComboBox<String>filterTaskTypeComboBox = new ComboBox<>();
+        filterTaskTypeComboBox.getItems().addAll("Must Do", "Side Task", "Recurring Task");
+
         HBox buttonBox = new HBox(10);
-        buttonBox.getChildren().addAll(new Label("Filter by Date:"), filterDatePicker, filterButton, clearButton);
+        buttonBox.getChildren().addAll(new Label("Filter by Date:"), filterDatePicker, new Label("Filter by Type:"), filterTaskTypeComboBox);
         buttonBox.setPadding(new Insets(10));
 
-        Label allTasksLabel = new Label("All Tasks");
+        HBox.setHgrow(filterButton, Priority.ALWAYS);
+        HBox.setHgrow(clearButton, Priority.ALWAYS);
+
+        buttonBox.getChildren().addAll(filterButton, clearButton);
+        buttonBox.setPadding(new Insets(10));
+
+        Label allTasksLabel = new Label("On-Time");
         allTasksLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        allTasksLabel.setTextFill(Color.BLACK);
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setRadius(10.0);
+        dropShadow.setOffsetX(1.0);
+        dropShadow.setOffsetY(1.0);
+        dropShadow.setColor(Color.rgb(255, 255, 255, 0.5));
+        allTasksLabel.setEffect(dropShadow);
 
         // Add components to the root layout
         rootPane.getChildren().addAll(allTasksLabel, buttonBox, allTasksListView, inputBox);
@@ -152,13 +170,20 @@ public class Goto {
             button.setPrefWidth(width);
         }
         button.setBackground(new Background(new BackgroundFill(bgcolor, new CornerRadii(radius), Insets.EMPTY)));
+        button.setStyle("-fx-border-color: lightgrey; -fx-border-width: 1px; -fx-border-radius: " + radius);
 
         return button;
     }
 
-    public static void onHoverButton(Button button, Color enter, Color exit) {
-        button.setOnMouseEntered(e -> button.setBackground(new Background(new BackgroundFill(enter, new CornerRadii(4), Insets.EMPTY))));
-        button.setOnMouseExited(e -> button.setBackground(new Background(new BackgroundFill(exit, new CornerRadii(4), Insets.EMPTY))));
+    public static void onHoverButton(Button button, Color enter, Color exit, Color entertextcolor, Color exittextcolor) {
+        button.setOnMouseEntered(e -> {
+            button.setBackground(new Background(new BackgroundFill(enter, new CornerRadii(4), Insets.EMPTY)));
+            button.setTextFill(entertextcolor);
+        });
+        button.setOnMouseExited(e -> {
+                button.setBackground(new Background(new BackgroundFill(exit, new CornerRadii(4), Insets.EMPTY)));
+                button.setTextFill(exittextcolor);
+        });
     }
 
 }
