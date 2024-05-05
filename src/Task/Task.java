@@ -1,17 +1,18 @@
 package Task;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public abstract class Task {
     protected String description;
     protected LocalDate deadline;
-    protected String type;
 
-    public Task(String description, LocalDate deadline, String type) {
+    protected boolean wasDone;
+//    protected String type;
+
+    public Task(String description, LocalDate deadline) {
         this.description = description;
         this.deadline = deadline;
-        this.type = type;
+        this.wasDone = false;
     }
 
     public String getDescription() {
@@ -30,19 +31,27 @@ public abstract class Task {
         this.deadline = deadline;
     }
 
-    public String getType() {
-        return type;
+    public abstract void done();
+
+    public boolean getWasDone() {
+        return wasDone;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setWasDone(boolean wasDone) {
+        this.wasDone = wasDone;
     }
 
-    public abstract void doTask();
+    //    public String getType() {
+//        return type;
+//    }
+//
+//    public void setType(String type) {
+//        this.type = type;
+//    }
 
-    @Override
-    public String toString() {
-        String deadlineString = deadline.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return description + " (" + type + ") - Deadline: " + deadlineString;
-    }
+//    @Override
+//    public String toString() {
+//        String deadlineString = deadline.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//        return description + " (" + type + ") - Deadline: " + deadlineString;
+//    }
 }

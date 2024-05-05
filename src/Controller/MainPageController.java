@@ -1,8 +1,7 @@
 package Controller;
 
-import Task.MustDoTask;
+import Task.GeneralTask;
 import Task.RecurringTask;
-import Task.SideTask;
 import Task.Task;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,21 +33,27 @@ public class MainPageController {
     public void startApp() {
         allTasks = FXCollections.observableArrayList();
         fetchTasksData();
+        for(Task task : allTasks) {
+            if (task instanceof RecurringTask && ((RecurringTask) task).getDateWasDone() != null && !((RecurringTask) task).getDateWasDone().isEqual(LocalDate.now())) {
+                task.setWasDone(false);
+                ((RecurringTask) task).setDateWasDone(null);
+            }
+        }
     }
 
-    public void addTask(String taskDescription, LocalDate startDate, LocalDate endDate, String taskType) {
+    public Task addTask(String taskDescription, LocalDate startDate, LocalDate endDate, String taskType) {
         if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
             // If so, set the end date equal to the start date
             endDate = startDate;
         }
+        Task newTask = null;
         if (!taskDescription.isEmpty() && endDate != null) {
-            Task newTask = null;
             switch (taskType) {
                 case "Must Do":
-                    newTask = new MustDoTask(taskDescription, endDate); // For Must Do, use end date as deadline
+                    newTask = new GeneralTask(taskDescription, endDate, "Must Do"); // For Must Do, use end date as deadline
                     break;
                 case "Side Task":
-                    newTask = new SideTask(taskDescription, endDate); // For Side Task, use end date as deadline
+                    newTask = new GeneralTask(taskDescription, endDate, "Side Task"); // For Side Task, use end date as deadline
                     break;
                 case "Recurring Task":
                     if (startDate != null && endDate != null) {
@@ -63,10 +68,18 @@ public class MainPageController {
             }
         }
         storeTasksData();
+        return newTask;
     }
 
     public void removeTask(int index) {
+        if(index == -1) return;
         allTasks.remove(index);
+        storeTasksData();
+    }
+
+    public void doneTask(int index) {
+        if(index == -1) return;
+        allTasks.get(index).done();
         storeTasksData();
     }
 
@@ -78,9 +91,14 @@ public class MainPageController {
                     .collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
         if(type == null) return filteredTasks;
-        if(type.equals("Must Do") || type.equals("Side Task") || type.equals("Recurring Task")) {
+        if(type.equals("Must Do") || type.equals("Side Task")) {
             filteredTasks = filteredTasks.stream()
-                    .filter(task -> task.getType().equals(type))
+                    .filter(task -> (task instanceof GeneralTask) && ((GeneralTask) task).getTaskType().equals(type))
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+        if(type.equals("Recurring Task")) {
+            filteredTasks = filteredTasks.stream()
+                    .filter(task -> (task instanceof RecurringTask))
                     .collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
         return filteredTasks;
@@ -100,15 +118,24 @@ public class MainPageController {
                 if(taskType.equals("Recurring Task")){
                     String startDate = arrTasks.getJSONObject(i).getString("Start Date");
                     lcStartDate = LocalDate.parse(startDate, formatter);
+
                 }
                 LocalDate lcEndDate = LocalDate.parse(endDate, formatter);
-                this.addTask(taskDescription, lcStartDate, lcEndDate, taskType);
+                Task task = this.addTask(taskDescription, lcStartDate, lcEndDate, taskType);
+                boolean wasDone = arrTasks.getJSONObject(i).getBoolean("Done");
+                task.setWasDone(wasDone);
+                if(taskType.equals("Recurring Task")){
+                    String dateWasDone = arrTasks.getJSONObject(i).getString("DateWasDone");
+                    if(dateWasDone.equals(""))
+                        ((RecurringTask)task).setDateWasDone(null);
+                    else
+                        ((RecurringTask)task).setDateWasDone(LocalDate.parse(dateWasDone, formatter));
+                }
             }
-
+            System.out.println(arrTasks);
             System.out.println("Successfully Read JSON file");
         } catch(Exception e){
             System.out.println(e);
-
         }
     }
 
@@ -117,9 +144,19 @@ public class MainPageController {
         for(Task task : allTasks) {
             JSONObject JSONtask = new JSONObject();
             JSONtask.put("Task Description",task.getDescription());
-            JSONtask.put("Task Type",task.getType());
-            if(task.getType().equals("Recurring Task")) {JSONtask.put("Start Date",((RecurringTask)task).getStartDate());}
+            String type = "";
+            if(task instanceof GeneralTask) type = ((GeneralTask) task).getTaskType();
+            if(task instanceof RecurringTask) type = "Recurring Task";
+            JSONtask.put("Task Type", type);
             JSONtask.put("End Date",task.getDeadline());
+            JSONtask.put("Done", task.getWasDone());
+            if(type.equals("Recurring Task")) {
+                JSONtask.put("Start Date",((RecurringTask)task).getStartDate());
+                if(((RecurringTask)task).getDateWasDone() == null)
+                    JSONtask.put("DateWasDone", "");
+                else
+                    JSONtask.put("DateWasDone", ((RecurringTask)task).getDateWasDone());
+            }
             JSONtasks.put(JSONtask);
         }
 

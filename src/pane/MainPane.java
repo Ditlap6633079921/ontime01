@@ -43,6 +43,8 @@ public class MainPane extends VBox {
                     } else {
                         setStyle(""); // Reset style
                     }
+                    if (task.getWasDone())
+                        setStyle("-fx-text-fill: green;");
                 }
             }
         });
@@ -84,12 +86,18 @@ public class MainPane extends VBox {
         Goto.onHoverButton(removeButton, Color.SLATEBLUE, Color.WHITE, Color.WHITE, Color.BLACK);
         removeButton.setOnAction(e -> {
             int index = allTasksListView.getSelectionModel().getSelectedIndex();
-            if(index != -1)
-                MainPageController.getInstance().removeTask(index);
+            MainPageController.getInstance().removeTask(index);
+        });
+
+        Button doneButton = Goto.BarButton("Done", 0, Color.WHITE, Color.BLACK, 4);
+        Goto.onHoverButton(doneButton, Color.SLATEBLUE, Color.WHITE, Color.WHITE, Color.BLACK);
+        doneButton.setOnAction(e -> {
+            int index = allTasksListView.getSelectionModel().getSelectedIndex();
+            MainPageController.getInstance().doneTask(index);
         });
 
         HBox inputBox = new HBox(10);
-        inputBox.getChildren().addAll(taskInput, new Label("Start Date:"), startDatePicker, new Label("End Date:"), endDatePicker, new Label("Task Type:"), taskTypeComboBox, addButton, removeButton);
+        inputBox.getChildren().addAll(taskInput, new Label("Start Date:"), startDatePicker, new Label("End Date:"), endDatePicker, new Label("Task Type:"), taskTypeComboBox, addButton, removeButton, doneButton);
         inputBox.setPadding(new Insets(10));
 
         // Add event listener to taskTypeComboBox to enable/disable startDatePicker
@@ -143,5 +151,7 @@ public class MainPane extends VBox {
         this.getChildren().addAll(allTasksLabel, buttonBox, allTasksListView, inputBox);
         this.setPadding(new Insets(10));
         this.setBackground(new Background(new BackgroundFill(Color.LIGHTCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
+
+        MainPageController.getInstance().storeTasksData();
     }
 }
