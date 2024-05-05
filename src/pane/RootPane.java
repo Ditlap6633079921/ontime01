@@ -16,7 +16,6 @@ import javafx.scene.layout.BackgroundFill;
 public class RootPane extends VBox {
     public RootPane() {
         setAlignment(Pos.TOP_CENTER);
-        setPadding(new Insets(32, 0, 0, 0));
         setBackground(new Background(new BackgroundFill(Color.LIGHTCYAN, CornerRadii.EMPTY, Insets.EMPTY)));
 
         Goto.setRootPane(this);
