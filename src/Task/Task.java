@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public abstract class Task {
-    private String description;
-    private LocalDate deadline;
-    private String type;
+    protected String description;
+    protected LocalDate deadline;
+    protected String type;
 
     public Task(String description, LocalDate deadline, String type) {
         this.description = description;

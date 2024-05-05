@@ -74,9 +74,10 @@ public class MainPageController {
         ObservableList<Task> filteredTasks = allTasks;
         if (date != null) {
             filteredTasks = allTasks.stream()
-                    .filter(task -> task.getDeadline().isEqual(date) || (task instanceof RecurringTask && date.isAfter(((RecurringTask) task).getStartDate()) && date.isBefore(((RecurringTask) task).getDeadline())))
+                    .filter(task -> task.getDeadline().isEqual(date) || (task instanceof RecurringTask && (date.isEqual(((RecurringTask) task).getStartDate()) || date.isAfter(((RecurringTask) task).getStartDate())) && date.isBefore(((RecurringTask) task).getDeadline())))
                     .collect(Collectors.toCollection(FXCollections::observableArrayList));
         }
+        if(type == null) return filteredTasks;
         if(type.equals("Must Do") || type.equals("Side Task") || type.equals("Recurring Task")) {
             filteredTasks = filteredTasks.stream()
                     .filter(task -> task.getType().equals(type))
@@ -91,7 +92,6 @@ public class MainPageController {
             JSONArray arrTasks = new JSONArray(stringTasks);
 
             for(int i=0;i<arrTasks.length();i++) {
-                System.out.println(arrTasks.getJSONObject(i).getString("End Date"));
                 String taskType = arrTasks.getJSONObject(i).getString("Task Type");
                 String taskDescription = arrTasks.getJSONObject(i).getString("Task Description");
                 String endDate = arrTasks.getJSONObject(i).getString("End Date");
