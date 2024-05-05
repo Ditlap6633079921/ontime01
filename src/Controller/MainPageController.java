@@ -22,7 +22,7 @@ public class MainPageController {
     // Task
     private ObservableList<Task> allTasks;
     //Date
-    public static MainPageController instance = null;
+    private static MainPageController instance = null;
 
     public static MainPageController getInstance() {
         if (instance == null) {
