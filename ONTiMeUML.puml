@@ -1,0 +1,77 @@
+@startuml
+class Controller.MainPageController {
+- ObservableList<Task> allTasks
++ {static} MainPageController instance
++ {static} MainPageController getInstance()
++ void startApp()
++ void addTask(String,LocalDate,LocalDate,String)
++ void removeTask(int)
++ ObservableList<Task> filterTasksByDate(LocalDate)
++ void fetchTasksData()
++ void storeTasksData()
++ void setAllTasks(ObservableList<Task>)
++ ObservableList<Task> getAllTasks()
+}
+class utils.Goto {
+- {static} RootPane rootPane
++ {static} void setRootPane(RootPane)
++ {static} void clear()
++ {static} void homePage()
++ {static} void mainPage()
++ {static} Button BarButton(String,int,Color,Color,int)
++ {static} void onHoverButton(Button,Color,Color)
+}
+class Task.MustDoTask {
++ <<Create>> MustDoTask(String,LocalDate)
++ void doTask()
+}
+class pane.HomePane {
++ <<Create>> HomePane()
+}
+class pane.RootPane {
++ <<Create>> RootPane()
+}
+class Task.RecurringTask {
+- LocalDate startDate
++ <<Create>> RecurringTask(String,LocalDate,LocalDate)
++ LocalDate getStartDate()
++ void doTask()
+}
+class Page.HomePage {
++ {static} void main(String[])
++ void start(Stage)
+}
+class Page.MainPage {
++ <<Create>> MainPage(VBox)
+}
+class Task.SideTask {
++ <<Create>> SideTask(String,LocalDate)
++ void doTask()
+}
+abstract class Task.Task {
+- String description
+- LocalDate deadline
+- String type
++ <<Create>> Task(String,LocalDate,String)
++ String getDescription()
++ void setDescription(String)
++ LocalDate getDeadline()
++ void setDeadline(LocalDate)
++ String getType()
++ void setType(String)
++ {abstract}void doTask()
++ String toString()
+}
+class GUI.TaskListCell {
+# void updateItem(Task,boolean)
+}
+
+
+Task.Task <|-- Task.MustDoTask
+javafx.scene.layout.VBox <|-- pane.HomePane
+javafx.scene.layout.VBox <|-- pane.RootPane
+Task.Task <|-- Task.RecurringTask
+javafx.application.Application <|-- Page.HomePage
+Task.Task <|-- Task.SideTask
+javafx.scene.control.ListCell <|-- GUI.TaskListCell
+@enduml

@@ -1,9 +1,12 @@
 package pane;
 
 import javafx.scene.input.MouseDragEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.VBox;
 import utils.Goto;
 import javafx.geometry.Pos;
-import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
