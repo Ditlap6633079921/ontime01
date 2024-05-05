@@ -6,7 +6,7 @@ class Controller.MainPageController {
 + void startApp()
 + void addTask(String,LocalDate,LocalDate,String)
 + void removeTask(int)
-+ ObservableList<Task> filterTasksByDate(LocalDate)
++ ObservableList<Task> filterTasks(LocalDate,String)
 + void fetchTasksData()
 + void storeTasksData()
 + void setAllTasks(ObservableList<Task>)
@@ -19,7 +19,7 @@ class utils.Goto {
 + {static} void homePage()
 + {static} void mainPage()
 + {static} Button BarButton(String,int,Color,Color,int)
-+ {static} void onHoverButton(Button,Color,Color)
++ {static} void onHoverButton(Button,Color,Color,Color,Color)
 }
 class Task.MustDoTask {
 + <<Create>> MustDoTask(String,LocalDate)
@@ -28,30 +28,31 @@ class Task.MustDoTask {
 class pane.HomePane {
 + <<Create>> HomePane()
 }
+class pane.MainPane {
++ <<Create>> MainPane()
+}
 class pane.RootPane {
 + <<Create>> RootPane()
+}
+class Application.Application {
++ {static} void main(String[])
++ void start(Stage)
 }
 class Task.RecurringTask {
 - LocalDate startDate
 + <<Create>> RecurringTask(String,LocalDate,LocalDate)
 + LocalDate getStartDate()
 + void doTask()
-}
-class Page.HomePage {
-+ {static} void main(String[])
-+ void start(Stage)
-}
-class Page.MainPage {
-+ <<Create>> MainPage(VBox)
++ String toString()
 }
 class Task.SideTask {
 + <<Create>> SideTask(String,LocalDate)
 + void doTask()
 }
 abstract class Task.Task {
-- String description
-- LocalDate deadline
-- String type
+# String description
+# LocalDate deadline
+# String type
 + <<Create>> Task(String,LocalDate,String)
 + String getDescription()
 + void setDescription(String)
@@ -62,16 +63,13 @@ abstract class Task.Task {
 + {abstract}void doTask()
 + String toString()
 }
-class GUI.TaskListCell {
-# void updateItem(Task,boolean)
-}
 
 
 Task.Task <|-- Task.MustDoTask
 javafx.scene.layout.VBox <|-- pane.HomePane
+javafx.scene.layout.VBox <|-- pane.MainPane
 javafx.scene.layout.VBox <|-- pane.RootPane
+Application.Application <|-- Application.Application
 Task.Task <|-- Task.RecurringTask
-javafx.application.Application <|-- Page.HomePage
 Task.Task <|-- Task.SideTask
-javafx.scene.control.ListCell <|-- GUI.TaskListCell
 @enduml
