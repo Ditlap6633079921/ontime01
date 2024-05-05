@@ -13,7 +13,7 @@ public class Application extends javafx.application.Application {
     public void start(Stage stage) {
         RootPane root = new RootPane();
 
-        Scene scene = new Scene(root, 800, 500);
+        Scene scene = new Scene(root, 900, 550);
 
         stage.setTitle("To-do List App");
         stage.setScene(scene);

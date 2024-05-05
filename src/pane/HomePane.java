@@ -57,7 +57,7 @@ public class HomePane extends VBox {
         vBox.getChildren().addAll(image, newText, button);
 
         setPrefHeight(690);
-        setPadding(new Insets(32, 0, 0, 0));
+        vBox.setPadding(new Insets(110, 0, 0, 0));
         getChildren().addAll(vBox);
     }
 }
