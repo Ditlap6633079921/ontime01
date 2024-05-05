@@ -1,11 +1,10 @@
-package Page;
+package Application;
 
 import pane.RootPane;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.application.Application;
 
-public class HomePage extends Application {
+public class Application extends javafx.application.Application {
     public static void main(String[] args) {
         launch(args);
     }

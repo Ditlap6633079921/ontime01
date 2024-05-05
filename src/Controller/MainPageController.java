@@ -70,16 +70,19 @@ public class MainPageController {
         storeTasksData();
     }
 
-    public ObservableList<Task> filterTasksByDate(LocalDate date) {
+    public ObservableList<Task> filterTasks(LocalDate date, String type) {
+        ObservableList<Task> filteredTasks = allTasks;
         if (date != null) {
-            ObservableList<Task> filteredTasks = allTasks.stream()
+            filteredTasks = allTasks.stream()
                     .filter(task -> task.getDeadline().isEqual(date) || (task instanceof RecurringTask && date.isAfter(((RecurringTask) task).getStartDate()) && date.isBefore(((RecurringTask) task).getDeadline())))
                     .collect(Collectors.toCollection(FXCollections::observableArrayList));
-            return filteredTasks;
-        } else {
-            // If no date selected, show all tasks
-            return allTasks;
         }
+        if(type.equals("Must Do") || type.equals("Side Task") || type.equals("Recurring Task")) {
+            filteredTasks = filteredTasks.stream()
+                    .filter(task -> task.getType().equals(type))
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        }
+        return filteredTasks;
     }
 
     public void fetchTasksData() {

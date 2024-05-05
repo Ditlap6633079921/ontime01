@@ -5,7 +5,6 @@ import Task.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -101,19 +100,22 @@ public class MainPane extends VBox {
         DatePicker filterDatePicker = new DatePicker();
         Button filterButton = Goto.BarButton("Filter", 0, Color.WHITE, Color.BLACK, 4);
         Goto.onHoverButton(filterButton, Color.SLATEBLUE, Color.WHITE, Color.WHITE, Color.BLACK);
-        filterButton.setOnAction(e -> {
-            allTasksListView.setItems(MainPageController.getInstance().filterTasksByDate(filterDatePicker.getValue()));
-        });
 
         Button clearButton = Goto.BarButton("Clear", 0, Color.WHITE, Color.BLACK, 4);
         Goto.onHoverButton(clearButton, Color.SLATEBLUE, Color.WHITE, Color.WHITE, Color.BLACK);
+
+        ComboBox<String> filterTaskTypeComboBox = new ComboBox<>();
+        filterTaskTypeComboBox.getItems().addAll("Must Do", "Side Task", "Recurring Task");
+
         clearButton.setOnAction(e -> {
             filterDatePicker.setValue(null);
-            allTasksListView.setItems(MainPageController.getInstance().filterTasksByDate(null)); // Show all tasks
+            filterTaskTypeComboBox.setValue(null);
+            allTasksListView.setItems(MainPageController.getInstance().filterTasks(null, "")); // Show all tasks
         });
 
-        ComboBox<String>filterTaskTypeComboBox = new ComboBox<>();
-        filterTaskTypeComboBox.getItems().addAll("Must Do", "Side Task", "Recurring Task");
+        filterButton.setOnAction(e -> {
+            allTasksListView.setItems(MainPageController.getInstance().filterTasks(filterDatePicker.getValue(), filterTaskTypeComboBox.getValue()));
+        });
 
         HBox buttonBox = new HBox(10);
         buttonBox.getChildren().addAll(new Label("Filter by Date:"), filterDatePicker, new Label("Filter by Type:"), filterTaskTypeComboBox);
